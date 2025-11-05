@@ -1,15 +1,27 @@
 from django.urls import path, include
+
+import os
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 @api_view(['GET'])
 def api_root(request, format=None):
+    # Get Codespace name from environment variable
+    codespace_name = os.environ.get('CODESPACE_NAME')
+    if codespace_name:
+        base_url = f"https://{codespace_name}-8000.app.github.dev/api/"
+    else:
+        # fallback to request host (localhost or other)
+        base_url = request.build_absolute_uri('/')
+        if not base_url.endswith('/'):
+            base_url += '/'
+        base_url += 'api/' if not base_url.endswith('api/') else ''
     return Response({
-        'users': request.build_absolute_uri('users/'),
-        'activities': request.build_absolute_uri('activities/'),
-        'teams': request.build_absolute_uri('teams/'),
-        'leaderboard': request.build_absolute_uri('leaderboard/'),
-        'workouts': request.build_absolute_uri('workouts/'),
+        'users': f"{base_url}users/",
+        'activities': f"{base_url}activities/",
+        'teams': f"{base_url}teams/",
+        'leaderboard': f"{base_url}leaderboard/",
+        'workouts': f"{base_url}workouts/",
     })
 
 urlpatterns = [
