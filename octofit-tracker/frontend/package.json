@@ -2,7 +2,6 @@
   "name": "octofit-tracker",
   "version": "1.0.0",
   "description": "A fitness tracking application to log activities, manage teams, and provide personalized workout suggestions.",
-  "main": "src/App.jsx",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

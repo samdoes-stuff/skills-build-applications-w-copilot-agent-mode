@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatHeader } from '../utils/formatHeader';
 
 const Activities = () => {
   const [data, setData] = React.useState([]);
@@ -27,7 +28,7 @@ const Activities = () => {
                 <thead className="table-light">
                   <tr>
                     {columns.map(col => (
-                      <th key={col}>{col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>
+                      <th key={col}>{formatHeader(col)}</th>
                     ))}
                   </tr>
                 </thead>
