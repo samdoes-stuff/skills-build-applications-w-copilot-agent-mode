@@ -45,7 +45,7 @@ from apps.workouts.models import Workout
 def create_users():
     users = []
     for i in range(5):
-        user, _ = User.objects.get_or_create(username=f'user{i}', email=f'user{i}@example.com')
+        user, _ = User.objects.get_or_create(username=f'user{i}', defaults={"email": f'user{i}@example.com'})
         users.append(user)
     return users
 
@@ -54,22 +54,27 @@ def create_activities(users):
     for user in users:
         for i in range(3):
             Activity.objects.get_or_create(
-                name=f'Activity {i}',
                 user=user,
-                date=datetime.now() - timedelta(days=random.randint(0, 10))
+                activity_type=f'Activity {i}',
+                defaults={
+                    'duration': timedelta(minutes=random.randint(20, 60)),
+                    'distance': round(random.uniform(1.0, 10.0), 2),
+                    'date': datetime.now() - timedelta(days=random.randint(0, 10))
+                }
             )
 
 # Create test teams
 def create_teams(users):
     for i in range(2):
         team, _ = Team.objects.get_or_create(name=f'Team {i}')
+        # Assign usernames as members (JSONField expects a list of usernames)
         team.members = [user.username for user in users[i*2:(i+1)*2]]
         team.save()
 
 # Create test leaderboard entries
 def create_leaderboard(users):
     for user in users:
-        LeaderboardEntry.objects.get_or_create(user_id=user.username, score=random.randint(0, 100))
+        LeaderboardEntry.objects.get_or_create(user_id=user.username, defaults={"score": random.randint(0, 100)})
 
 # Create test workouts
 def create_workouts(users):
@@ -78,8 +83,10 @@ def create_workouts(users):
             Workout.objects.get_or_create(
                 user_id=user.username,
                 activity=f'Workout {i}',
-                duration=random.randint(20, 60),
-                date=datetime.now() - timedelta(days=random.randint(0, 10))
+                defaults={
+                    "duration": random.randint(20, 60),
+                    "date": datetime.now() - timedelta(days=random.randint(0, 10))
+                }
             )
 
 def main():
