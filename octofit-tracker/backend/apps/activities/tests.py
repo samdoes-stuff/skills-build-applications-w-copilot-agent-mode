@@ -21,5 +21,4 @@ class ActivityModelTest(TestCase):
             activity = Activity.objects.create(name='Running', user_id=1, date='2025-01-01')
             self.assertEqual(activity.name, 'Running')
         except Exception:
-            import unittest
             raise unittest.SkipTest("Django ORM not available in this environment")
