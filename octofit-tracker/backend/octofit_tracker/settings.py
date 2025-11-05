@@ -1,3 +1,5 @@
+# Use custom user model
+AUTH_USER_MODEL = 'users.User'
 """
 Django settings for octofit_tracker project.
 

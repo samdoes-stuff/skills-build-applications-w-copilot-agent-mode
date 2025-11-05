@@ -17,4 +17,4 @@ from .models import Activity
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'user', 'date')
+    list_display = ('id', 'activity_type', 'user', 'date')

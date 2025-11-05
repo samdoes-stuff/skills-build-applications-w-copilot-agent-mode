@@ -45,13 +45,30 @@ from apps.workouts.models import Workout
 def create_users():
     users = []
     for i in range(5):
-        user, _ = User.objects.get_or_create(username=f'user{i}', defaults={"email": f'user{i}@example.com'})
+        user, created = User.objects.get_or_create(
+            username=f'user{i}',
+            defaults={"email": f'user{i}@example.com'}
+        )
+        if created:
+            user.set_password('testpassword')
+            user.save()
+            user.refresh_from_db()
+        else:
+            # Ensure user has a usable password and is saved
+            if not user.has_usable_password():
+                user.set_password('testpassword')
+                user.save()
         users.append(user)
+    print('User list after creation:')
+    for user in users:
+        print(f"User: pk={user.pk}, username={user.username}, email={user.email}")
     return users
 
 # Create test activities
 def create_activities(users):
     for user in users:
+        # Reload user from DB to ensure it is fully saved
+        user = User.objects.get(pk=user.pk)
         for i in range(3):
             Activity.objects.get_or_create(
                 user=user,
@@ -65,6 +82,7 @@ def create_activities(users):
 
 # Create test teams
 def create_teams(users):
+    Team.objects.all().delete()
     for i in range(2):
         team, _ = Team.objects.get_or_create(name=f'Team {i}')
         # Assign usernames as members (JSONField expects a list of usernames)
@@ -74,14 +92,14 @@ def create_teams(users):
 # Create test leaderboard entries
 def create_leaderboard(users):
     for user in users:
-        LeaderboardEntry.objects.get_or_create(user_id=user.username, defaults={"score": random.randint(0, 100)})
+        LeaderboardEntry.objects.get_or_create(user_id=str(user.pk), defaults={"score": random.randint(0, 100)})
 
 # Create test workouts
 def create_workouts(users):
     for user in users:
         for i in range(2):
             Workout.objects.get_or_create(
-                user_id=user.username,
+                user_id=str(user.pk),
                 activity=f'Workout {i}',
                 defaults={
                     "duration": random.randint(20, 60),
