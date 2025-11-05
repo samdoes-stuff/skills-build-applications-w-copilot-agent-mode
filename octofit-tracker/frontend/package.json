@@ -1,0 +1,30 @@
+{
+  "name": "octofit-tracker",
+  "version": "1.0.0",
+  "description": "A fitness tracking application to log activities, manage teams, and provide personalized workout suggestions.",
+  "main": "src/App.jsx",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "5.0.0",
+    "axios": "^0.21.1",
+    "react-router-dom": "^6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.28.0"
+  },
+  "keywords": [
+    "fitness",
+    "tracker",
+    "react"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
